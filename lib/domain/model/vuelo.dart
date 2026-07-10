@@ -1,3 +1,19 @@
+class AvionRef {
+  final int    id;
+  final String modelo;
+  final String capacidad;
+  final String matricula;
+ 
+  const AvionRef({required this.id, required this.modelo, required this.capacidad, required this.matricula});
+ 
+  factory AvionRef.fromJson(Map<String, dynamic> j) => AvionRef(
+    id:        j['id']        as int,
+    modelo:    j['modelo']    as String,
+    capacidad: j['capacidad'] as String,
+    matricula: j['matricula'] as String,
+  );
+}
+
 class Vuelo {
   final int       id;
   final String    codigoVuelo;
