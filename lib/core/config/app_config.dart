@@ -2,9 +2,11 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AppConfig {
-  static const String appName = 'Cotopaxi Airlines';
+  static String get baseUrl {
+    final url = dotenv.env['API_BASE_URL'];
+    if (url != null && url.trim().isNotEmpty) return url;
+    return 'http://cotopaxi-airlines-api.uaeftt-ute.site/api';
+  }
 
-  static String get baseUrl =>
-      dotenv.env['API_BASE_URL'] ??
-      'http://cotopaxi-airlines-api.uaeftt-ute.site/api';
+  static const String appName = 'Cotopaxi Airlines';
 }
