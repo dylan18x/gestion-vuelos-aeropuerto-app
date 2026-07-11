@@ -71,48 +71,56 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/terminales/nuevo', builder: (_, __) => const TerminalFormScreen()),
       GoRoute(path: '/terminales/:id', builder: (_, s) =>
         TerminalDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/terminales/:id/editar', builder: (_, s) => const TerminalFormScreen()),
 
       // Puertas
       GoRoute(path: '/puertas', builder: (_, __) => const PuertaListScreen()),
       GoRoute(path: '/puertas/nuevo', builder: (_, __) => const PuertaFormScreen()),
       GoRoute(path: '/puertas/:id', builder: (_, s) =>
         PuertaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/puertas/:id/editar', builder: (_, s) => const PuertaFormScreen()),
 
-      // Aerolíneas
+      // Aerolneas
       GoRoute(path: '/aerolineas', builder: (_, __) => const AerolineaListScreen()),
       GoRoute(path: '/aerolineas/nuevo', builder: (_, __) => const AerolineaFormScreen()),
       GoRoute(path: '/aerolineas/:id', builder: (_, s) =>
         AerolineaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/aerolineas/:id/editar', builder: (_, s) => const AerolineaFormScreen()),
 
       // Aviones
       GoRoute(path: '/aviones', builder: (_, __) => const AvionListScreen()),
       GoRoute(path: '/aviones/nuevo', builder: (_, __) => const AvionFormScreen()),
       GoRoute(path: '/aviones/:id', builder: (_, s) =>
         AvionDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/aviones/:id/editar', builder: (_, s) => const AvionFormScreen()),
 
-      // Tipos de avión
+      // Tipos de avin
       GoRoute(path: '/tipos-avion', builder: (_, __) => const TipoAvionListScreen()),
       GoRoute(path: '/tipos-avion/nuevo', builder: (_, __) => const TipoAvionFormScreen()),
       GoRoute(path: '/tipos-avion/:id', builder: (_, s) =>
         TipoAvionDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/tipos-avion/:id/editar', builder: (_, s) => const TipoAvionFormScreen()),
 
       // Mantenimientos
       GoRoute(path: '/mantenimientos', builder: (_, __) => const MantenimientoListScreen()),
       GoRoute(path: '/mantenimientos/nuevo', builder: (_, __) => const MantenimientoFormScreen()),
       GoRoute(path: '/mantenimientos/:id', builder: (_, s) =>
         MantenimientoDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/mantenimientos/:id/editar', builder: (_, s) => const MantenimientoFormScreen()),
 
       // Estado de Vuelo
       GoRoute(path: '/estado-vuelo', builder: (_, __) => const EstadoVueloListScreen()),
       GoRoute(path: '/estado-vuelo/nuevo', builder: (_, __) => const EstadoVueloFormScreen()),
       GoRoute(path: '/estado-vuelo/:id', builder: (_, s) =>
         EstadoVueloDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/estado-vuelo/:id/editar', builder: (_, s) => const EstadoVueloFormScreen()),
 
       // Clima
       GoRoute(path: '/clima', builder: (_, __) => const ClimaListScreen()),
       GoRoute(path: '/clima/nuevo', builder: (_, __) => const ClimaFormScreen()),
       GoRoute(path: '/clima/:id', builder: (_, s) =>
         ClimaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/clima/:id/editar', builder: (_, s) => const ClimaFormScreen()),
     ],
   );
 
