@@ -29,7 +29,11 @@ class _MantenimientoFormScreenState extends ConsumerState<MantenimientoFormScree
   @override
   void initState() {
     super.initState();
-    _fecha = TextEditingController(text: widget.mantenimiento?.fecha.length == 24 ? widget.mantenimiento?.fecha.substring(0, 10) : widget.mantenimiento?.fecha.substring(0, 10) ?? '');
+    String initFecha = '';
+    if (widget.mantenimiento != null && widget.mantenimiento!.fecha.length >= 10) {
+      initFecha = widget.mantenimiento!.fecha.substring(0, 10);
+    }
+    _fecha = TextEditingController(text: initFecha);
     _estado = TextEditingController(text: widget.mantenimiento?.estado ?? '');
     _idAvion   = TextEditingController(text: widget.mantenimiento?.idAvion.toString() ?? '');
   }
@@ -63,9 +67,9 @@ class _MantenimientoFormScreenState extends ConsumerState<MantenimientoFormScree
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     final payload = {
-      'fecha': '${_fecha.text.trim()}T00:00:00Z',
+      'fecha': _fecha.text.trim(),
       'estado': _estado.text.trim(),
-      'avion_id': int.parse(_idAvion.text.trim())
+      'id_avion': int.parse(_idAvion.text.trim())
     };
     try {
       final repo = ref.read(mantenimientoRepositoryProvider);

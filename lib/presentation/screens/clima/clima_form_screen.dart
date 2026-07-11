@@ -31,7 +31,11 @@ class _ClimaFormScreenState extends ConsumerState<ClimaFormScreen> {
   @override
   void initState() {
     super.initState();
-    _fecha = TextEditingController(text: widget.clima?.fecha.length == 24 ? widget.clima?.fecha.substring(0, 10) : widget.clima?.fecha.substring(0, 10) ?? '');
+    String initFecha = '';
+    if (widget.clima != null && widget.clima!.fecha.length >= 10) {
+      initFecha = widget.clima!.fecha.substring(0, 10);
+    }
+    _fecha = TextEditingController(text: initFecha);
     _temperatura = TextEditingController(text: widget.clima?.temperatura.toString() ?? '');
     _condicion   = TextEditingController(text: widget.clima?.condicion   ?? '');
     _velocidadViento   = TextEditingController(text: widget.clima?.velocidadViento.toString() ?? '');
@@ -67,11 +71,11 @@ class _ClimaFormScreenState extends ConsumerState<ClimaFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _loading = true);
     final payload = {
-      'fecha': '${_fecha.text.trim()}T00:00:00Z',
+      'fecha': _fecha.text.trim(),
       'temperatura': double.parse(_temperatura.text.trim()),
       'condicion': _condicion.text.trim(),
       'velocidad_viento': double.parse(_velocidadViento.text.trim()),
-      'aeropuerto_id': int.parse(_idAeropuerto.text.trim())
+      'id_aeropuerto': int.parse(_idAeropuerto.text.trim())
     };
     try {
       final repo = ref.read(climaRepositoryProvider);
@@ -144,7 +148,11 @@ class _ClimaFormScreenState extends ConsumerState<ClimaFormScreen> {
       validator: (v) {
         if (v == null || v.trim().isEmpty) return '$label es obligatorio';
         if (isNum && int.tryParse(v.trim()) == null) return 'Debe ser un número válido';
-        if (isDouble && double.tryParse(v.trim()) == null) return 'Debe ser un número válido';
+        if (isDouble) {
+          final val = double.tryParse(v.trim());
+          if (val == null) return 'Debe ser un número válido';
+          if (val >= 1000 || val <= -1000) return 'Máximo 3 dígitos antes del decimal';
+        }
         return null;
       },
     );

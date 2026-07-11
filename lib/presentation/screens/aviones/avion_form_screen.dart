@@ -53,7 +53,7 @@ class _AvionFormScreenState extends ConsumerState<AvionFormScreen> {
       'modelo': _modelo.text.trim(),
       'capacidad': int.parse(_capacidad.text.trim()),
       'matricula': _matricula.text.trim(),
-      'aerolinea_id': int.parse(_idAerolinea.text.trim())
+      'id_aerolinea': int.parse(_idAerolinea.text.trim())
     };
     try {
       final repo = ref.read(avionRepositoryProvider);
