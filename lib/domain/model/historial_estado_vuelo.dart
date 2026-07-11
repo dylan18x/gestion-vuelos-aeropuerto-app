@@ -1,3 +1,6 @@
+// lib/domain/model/historial_estado_vuelo.dart
+import 'estado_vuelo.dart';
+
 class HistorialEstadoVuelo {
   final int            id;
   final String         fechaCambio;
