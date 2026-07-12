@@ -9,7 +9,7 @@ class HorarioRepositoryImpl implements HorarioRepository {
   HorarioRepositoryImpl(this._datasource);
 
   @override
-  Future<Horario> getHorarioByVuelo(int idVuelo) =>
+  Future<Horario?> getHorarioByVuelo(int idVuelo) =>
       _datasource.getHorarioByVuelo(idVuelo);
 
   @override

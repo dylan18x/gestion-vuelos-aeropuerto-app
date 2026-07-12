@@ -1,3 +1,5 @@
+// lib/domain/model/horario.dart
+
 class VueloRef {
   final int id;
   final String codigoVuelo;
@@ -20,35 +22,36 @@ class VueloRef {
 }
 
 class Horario {
-  final int    id;
-  final String salidaProgramada;  
-  final String llegadaProgramada;
-  final int    idVuelo;
+  final int      id;
+  final String   salidaProgramada;
+  final String   llegadaProgramada;
+  final VueloRef vuelo;              // 👈 antes era `int idVuelo`
 
   const Horario({
     required this.id,
     required this.salidaProgramada,
     required this.llegadaProgramada,
-    required this.idVuelo,
+    required this.vuelo,
   });
 
   factory Horario.fromJson(Map<String, dynamic> j) => Horario(
     id:                j['id']                 as int,
     salidaProgramada:  j['salida_programada']  as String,
     llegadaProgramada: j['llegada_programada'] as String,
-    idVuelo:           j['id_vuelo']           as int,
+    vuelo:             VueloRef.fromJson(j['id_vuelo'] as Map<String, dynamic>), // 👈 parsea el objeto
   );
 
+  /// Para crear/editar: la API espera el id plano, no el objeto completo.
   Map<String, dynamic> toJson() => {
     'salida_programada':  salidaProgramada,
     'llegada_programada': llegadaProgramada,
-    'id_vuelo':            idVuelo,
+    'id_vuelo':            vuelo.id,
   };
 
   Horario copyWith({String? salidaProgramada, String? llegadaProgramada}) => Horario(
     id:                id,
     salidaProgramada:  salidaProgramada  ?? this.salidaProgramada,
     llegadaProgramada: llegadaProgramada ?? this.llegadaProgramada,
-    idVuelo:           idVuelo,
+    vuelo:             vuelo,
   );
 }

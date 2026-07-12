@@ -2,6 +2,7 @@
 import '../model/historial_estado_vuelo.dart';
 
 abstract class HistorialEstadoVueloRepository {
+  Future<List<HistorialEstadoVuelo>> getAllHistoriales();
   Future<List<HistorialEstadoVuelo>> getHistorialByVuelo(int idVuelo);
   Future<HistorialEstadoVuelo>        registrarCambioEstado(Map<String, dynamic> payload);
 }
