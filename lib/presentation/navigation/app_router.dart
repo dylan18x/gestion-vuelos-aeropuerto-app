@@ -39,7 +39,33 @@ import '../screens/clima/clima_form_screen.dart';
 import '../screens/clima/clima_detalle_screen.dart';
 import '../screens/historial_estado_vuelo/historial_estado_vuelo_list_screen.dart';
 import '../screens/historial_estado_vuelo/historial_estado_vuelo_form_screen.dart';
-import '../screens/historial_estado_vuelo/historial_estado_vuelo_detalle_screen.dart';
+import '../screens/control_trafico/control_trafico_list_screen.dart';
+import '../screens/rutas/ruta_list_screen.dart';
+import '../screens/rutas/ruta_form_screen.dart';
+import '../screens/rutas/ruta_detalle_screen.dart';
+import '../screens/tripulaciones/tripulacion_list_screen.dart';
+import '../screens/tripulaciones/tripulacion_form_screen.dart';
+import '../screens/tripulaciones/tripulacion_detalle_screen.dart';
+import '../screens/control_trafico/control_trafico_form_screen.dart';
+import '../screens/control_trafico/control_trafico_detalle_screen.dart';
+import '../screens/empleado/empleado_list_screen.dart';
+import '../screens/empleado/empleado_form_screen.dart';
+import '../screens/empleado/empleado_detalle_screen.dart';
+import '../screens/escalas/escala_list_screen.dart';
+import '../screens/escalas/escala_form_screen.dart';
+import '../screens/escalas/escala_detalle_screen.dart';
+import '../screens/horarios/horario_list_screen.dart';
+import '../screens/horarios/horario_form_screen.dart';
+import '../screens/horarios/horario_detalle_screen.dart';
+import '../screens/incidente/incidente_list_screen.dart';
+import '../screens/incidente/incidente_form_screen.dart';
+import '../screens/incidente/incidente_detalle_screen.dart';
+import '../screens/piloto/piloto_list_screen.dart';
+import '../screens/piloto/piloto_form_screen.dart';
+import '../screens/piloto/piloto_detalle_screen.dart';
+import '../screens/registro_vuelo/registro_vuelo_list_screen.dart';
+import '../screens/registro_vuelo/registro_vuelo_form_screen.dart';
+import '../screens/registro_vuelo/registro_vuelo_detalle_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -134,6 +160,62 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Historial de estados de vuelo
       GoRoute(path: '/historial-estados-vuelo', builder: (_, __) => const HistorialEstadoVueloListScreen()),
       GoRoute(path: '/historial-estados-vuelo/nuevo', builder: (_, __) => const HistorialEstadoVueloFormScreen()),
+
+      // Controles de tráfico
+      GoRoute(path: '/controles-trafico', builder: (_, __) => const ControlTraficoListScreen()),
+      GoRoute(path: '/control-trafico/nuevo', builder: (_, __) => const ControlTraficoFormScreen()),
+      GoRoute(path: '/control-trafico/:id', builder: (_, s) =>
+        ControlTraficoDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/control-trafico/:id/editar', builder: (_, s) => const ControlTraficoFormScreen()),
+
+      // Empleados
+      GoRoute(path: '/empleados', builder: (_, __) => const EmpleadoListScreen()),
+      GoRoute(path: '/empleados/nuevo', builder: (_, __) => const EmpleadoFormScreen()),
+      GoRoute(path: '/empleados/:id', builder: (_, s) =>
+        EmpleadoDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/empleados/:id/editar', builder: (_, s) => const EmpleadoFormScreen()),
+
+      // Rutas
+      GoRoute(path: '/rutas', builder: (_, __) => const RutaListScreen()),
+      GoRoute(path: '/rutas/nuevo', builder: (_, __) => const RutaFormScreen()),
+      GoRoute(path: '/rutas/:id', builder: (_, s) =>
+        RutaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/rutas/:id/editar', builder: (_, s) => const RutaFormScreen()),
+
+      // Tripulación
+      GoRoute(path: '/tripulacion', builder: (_, __) => const TripulacionListScreen()),
+      GoRoute(path: '/tripulacion/nuevo', builder: (_, __) => const TripulacionFormScreen()),
+      GoRoute(path: '/tripulacion/:id', builder: (_, s) =>
+        TripulacionDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/tripulacion/:id/editar', builder: (_, s) => const TripulacionFormScreen()),
+
+      // Escalas
+      GoRoute(path: '/escalas', builder: (_, __) => const EscalaListScreen()),
+      GoRoute(path: '/escalas/:idVuelo', builder: (_, s) =>
+        EscalaDetalleScreen(idVuelo: int.parse(s.pathParameters['idVuelo']!))),
+
+      // Horarios
+      GoRoute(path: '/horarios', builder: (_, __) => const HorarioListScreen()),
+      GoRoute(path: '/horarios/:idVuelo', builder: (_, s) =>
+        HorarioDetalleScreen(idVuelo: int.parse(s.pathParameters['idVuelo']!))),
+
+      // Incidentes
+      GoRoute(path: '/incidentes', builder: (_, __) => const IncidenteListScreen()),
+      GoRoute(path: '/incidentes/nuevo', builder: (_, __) => const IncidenteFormScreen()),
+      GoRoute(path: '/incidentes/:id', builder: (_, s) =>
+        IncidenteDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      
+      // Pilotos
+      GoRoute(path: '/pilotos', builder: (_, __) => const PilotoListScreen()),
+      GoRoute(path: '/pilotos/nuevo', builder: (_, __) => const PilotoFormScreen()),
+      GoRoute(path: '/pilotos/:id', builder: (_, s) =>
+        PilotoDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      
+      // Registros de vuelo
+      GoRoute(path: '/registros-vuelo', builder: (_, __) => const RegistroVueloListScreen()),
+      GoRoute(path: '/registros-vuelo/nuevo', builder: (_, __) => const RegistroVueloFormScreen()),
+      GoRoute(path: '/registros-vuelo/:id', builder: (_, s) =>
+        RegistroVueloDetalleScreen(id: int.parse(s.pathParameters['id']!))),
     ],
   );
 

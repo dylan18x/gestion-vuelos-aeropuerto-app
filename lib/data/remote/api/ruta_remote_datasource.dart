@@ -17,12 +17,27 @@ class RutaRemoteDatasourceImpl implements RutaRemoteDatasource {
   final Dio _dio;
   RutaRemoteDatasourceImpl(this._dio);
 
+  List<dynamic> _extractList(dynamic data) {
+    if (data is List) return data;
+    if (data is Map) {
+      final results = data['results'];
+      if (results is List) return results;
+      if (results is Map) return [results];
+      return [data];
+    }
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
+  Map<String, dynamic> _extractMap(dynamic data) {
+    if (data is Map) return Map<String, dynamic>.from(data);
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
   @override
   Future<List<Ruta>> getRutas() async {
     try {
       final res = await _dio.get('/rutas/');
-      // Ajusta esto si tu API pagina: usa res.data['results'] en vez de res.data
-      return (res.data as List)
+      return _extractList(res.data)
           .map((e) => Ruta.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
@@ -34,7 +49,7 @@ class RutaRemoteDatasourceImpl implements RutaRemoteDatasource {
   Future<Ruta> getRuta(int id) async {
     try {
       final res = await _dio.get('/rutas/$id/');
-      return Ruta.fromJson(res.data as Map<String, dynamic>);
+      return Ruta.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -44,7 +59,7 @@ class RutaRemoteDatasourceImpl implements RutaRemoteDatasource {
   Future<Ruta> createRuta(Map<String, dynamic> payload) async {
     try {
       final res = await _dio.post('/rutas/', data: payload);
-      return Ruta.fromJson(res.data as Map<String, dynamic>);
+      return Ruta.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -54,7 +69,7 @@ class RutaRemoteDatasourceImpl implements RutaRemoteDatasource {
   Future<Ruta> updateRuta(int id, Map<String, dynamic> payload) async {
     try {
       final res = await _dio.patch('/rutas/$id/', data: payload);
-      return Ruta.fromJson(res.data as Map<String, dynamic>);
+      return Ruta.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }

@@ -25,6 +25,15 @@ class DashboardScreen extends ConsumerWidget {
       const _Module('Estado Vuelo',   Icons.flag_rounded,             '/estado-vuelo',   AppColors.accent),
       const _Module('Clima',          Icons.cloud_rounded,            '/clima',          AppColors.info),
       const _Module('Historial Estado Vuelo', Icons.history_rounded, '/historial-estados-vuelo', AppColors.success),
+      const _Module('Rutas',          Icons.route_rounded,            '/rutas',          Color(0xFF0EA5E9)),
+      const _Module('Tripulación',    Icons.groups_rounded,           '/tripulacion',   Color(0xFF8B5CF6)),
+      const _Module('Escalas',        Icons.alt_route_rounded,        '/escalas',        Color(0xFF14B8A6)),
+      const _Module('Horarios',       Icons.schedule_rounded,         '/horarios',      Color(0xFFF59E0B)),
+      const _Module('Controles de Tráfico', Icons.traffic_rounded, '/controles-trafico', Color(0xFFF97316)),
+      const _Module('Empleados',      Icons.badge_rounded,            '/empleados',      Color(0xFF3B82F6)),
+      const _Module('Pilotos',        Icons.person_rounded,           '/pilotos',        Color(0xFF10B981)),
+      const _Module('Incidentes',     Icons.report_problem_rounded,   '/incidentes'  ,Color(0xFFF43F5E)),
+      const _Module('Registros de Vuelo', Icons.assignment_rounded,   '/registros-vuelo', Color(0xFF8B5CF6)),
     ];
 
     return Scaffold(

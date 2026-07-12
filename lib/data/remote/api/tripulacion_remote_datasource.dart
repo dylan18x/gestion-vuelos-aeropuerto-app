@@ -17,12 +17,29 @@ class TripulacionRemoteDatasourceImpl implements TripulacionRemoteDatasource {
   final Dio _dio;
   TripulacionRemoteDatasourceImpl(this._dio);
 
+  List<dynamic> _extractList(dynamic data) {
+    if (data is List) return data;
+    if (data is Map) {
+      final results = data['results'];
+      if (results is List) return results;
+      if (results is Map) return [results];
+      return [data];
+    }
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
+  Map<String, dynamic> _extractMap(dynamic data) {
+    if (data is Map) return Map<String, dynamic>.from(data);
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
   @override
   Future<List<Tripulacion>> getTripulacion() async {
     try {
       final res = await _dio.get('/tripulacion/');
-      final list = res.data is List ? res.data as List : (res.data['results'] as List);
-      return list.map((e) => Tripulacion.fromJson(e as Map<String, dynamic>)).toList();
+      return _extractList(res.data)
+          .map((e) => Tripulacion.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -32,7 +49,7 @@ class TripulacionRemoteDatasourceImpl implements TripulacionRemoteDatasource {
   Future<Tripulacion> getTripulante(int id) async {
     try {
       final res = await _dio.get('/tripulacion/$id/');
-      return Tripulacion.fromJson(res.data as Map<String, dynamic>);
+      return Tripulacion.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -43,7 +60,7 @@ class TripulacionRemoteDatasourceImpl implements TripulacionRemoteDatasource {
     try {
       // payload esperado: { 'cargo': 'Sobrecargo', 'id_empleado': 8 }
       final res = await _dio.post('/tripulacion/', data: payload);
-      return Tripulacion.fromJson(res.data as Map<String, dynamic>);
+      return Tripulacion.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -53,7 +70,7 @@ class TripulacionRemoteDatasourceImpl implements TripulacionRemoteDatasource {
   Future<Tripulacion> updateTripulante(int id, Map<String, dynamic> payload) async {
     try {
       final res = await _dio.patch('/tripulacion/$id/', data: payload);
-      return Tripulacion.fromJson(res.data as Map<String, dynamic>);
+      return Tripulacion.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }

@@ -6,9 +6,9 @@ import '../../../domain/model/horario.dart';
 import 'dio_client.dart';
 
 abstract class HorarioRemoteDatasource {
-  Future<Horario> getHorarioByVuelo(int idVuelo);
-  Future<Horario> createHorario(Map<String, dynamic> payload);
-  Future<Horario> updateHorario(int id, Map<String, dynamic> payload);
+  Future<Horario?> getHorarioByVuelo(int idVuelo);
+  Future<Horario>  createHorario(Map<String, dynamic> payload);
+  Future<Horario>  updateHorario(int id, Map<String, dynamic> payload);
   Future<void>     deleteHorario(int id);
 }
 
@@ -16,12 +16,28 @@ class HorarioRemoteDatasourceImpl implements HorarioRemoteDatasource {
   final Dio _dio;
   HorarioRemoteDatasourceImpl(this._dio);
 
+  List<dynamic> _extractList(dynamic data) {
+    if (data is List) return data;
+    if (data is Map) {
+      final results = data['results'];
+      if (results is List) return results;
+      if (results is Map) return [results];
+      return [data];
+    }
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
+  Map<String, dynamic> _extractMap(dynamic data) {
+    if (data is Map) return Map<String, dynamic>.from(data);
+    throw FormatException('Respuesta inesperada del servidor: $data');
+  }
+
   @override
-  Future<Horario> getHorarioByVuelo(int idVuelo) async {
+  Future<Horario?> getHorarioByVuelo(int idVuelo) async {
     try {
-      // Ajusta el filtro al que use tu API: puede ser query param o ruta anidada
       final res = await _dio.get('/horarios/', queryParameters: {'id_vuelo': idVuelo});
-      final list = res.data is List ? res.data as List : (res.data['results'] as List);
+      final list = _extractList(res.data);
+      if (list.isEmpty) return null;
       return Horario.fromJson(list.first as Map<String, dynamic>);
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
@@ -32,7 +48,7 @@ class HorarioRemoteDatasourceImpl implements HorarioRemoteDatasource {
   Future<Horario> createHorario(Map<String, dynamic> payload) async {
     try {
       final res = await _dio.post('/horarios/', data: payload);
-      return Horario.fromJson(res.data as Map<String, dynamic>);
+      return Horario.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
@@ -42,7 +58,7 @@ class HorarioRemoteDatasourceImpl implements HorarioRemoteDatasource {
   Future<Horario> updateHorario(int id, Map<String, dynamic> payload) async {
     try {
       final res = await _dio.patch('/horarios/$id/', data: payload);
-      return Horario.fromJson(res.data as Map<String, dynamic>);
+      return Horario.fromJson(_extractMap(res.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
