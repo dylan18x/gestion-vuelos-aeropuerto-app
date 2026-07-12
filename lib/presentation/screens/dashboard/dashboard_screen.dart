@@ -14,6 +14,7 @@ class DashboardScreen extends ConsumerWidget {
     final user = auth.user;
 
     final modules = [
+      const _Module('Vuelos',         Icons.flight_takeoff_rounded,   '/vuelos',         Color(0xFF3B82F6)),
       const _Module('Aeropuertos',    Icons.location_city_rounded,   '/aeropuertos',    AppColors.info),
       const _Module('Terminales',     Icons.apartment_rounded,        '/terminales',     AppColors.accent),
       const _Module('Puertas',        Icons.door_sliding_rounded,     '/puertas',        AppColors.success),
@@ -23,6 +24,7 @@ class DashboardScreen extends ConsumerWidget {
       const _Module('Mantenimientos', Icons.build_circle_rounded,     '/mantenimientos', Color(0xFF14B8A6)),
       const _Module('Estado Vuelo',   Icons.flag_rounded,             '/estado-vuelo',   AppColors.accent),
       const _Module('Clima',          Icons.cloud_rounded,            '/clima',          AppColors.info),
+      const _Module('Historial Estado Vuelo', Icons.history_rounded, '/historial-estados-vuelo', AppColors.success),
     ];
 
     return Scaffold(

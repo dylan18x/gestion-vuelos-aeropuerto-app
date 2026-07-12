@@ -9,6 +9,10 @@ class HistorialEstadoVueloRepositoryImpl implements HistorialEstadoVueloReposito
   HistorialEstadoVueloRepositoryImpl(this._datasource);
 
   @override
+  Future<List<HistorialEstadoVuelo>> getAllHistoriales() =>
+      _datasource.getAllHistoriales();
+
+  @override
   Future<List<HistorialEstadoVuelo>> getHistorialByVuelo(int idVuelo) =>
       _datasource.getHistorialByVuelo(idVuelo);
 

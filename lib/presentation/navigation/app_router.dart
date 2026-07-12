@@ -8,6 +8,8 @@ import '../screens/auth/profile_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/vuelos/vuelo_detalle_screen.dart';
+import '../screens/vuelos/vuelo_form_screen.dart';
+import '../screens/vuelos/vuelo_list_screen.dart';
 import '../screens/aeropuertos/aeropuerto_list_screen.dart';
 import '../screens/aeropuertos/aeropuerto_form_screen.dart';
 import '../screens/aeropuertos/aeropuerto_detalle_screen.dart';
@@ -35,6 +37,9 @@ import '../screens/estado_vuelo/estado_vuelo_detalle_screen.dart';
 import '../screens/clima/clima_list_screen.dart';
 import '../screens/clima/clima_form_screen.dart';
 import '../screens/clima/clima_detalle_screen.dart';
+import '../screens/historial_estado_vuelo/historial_estado_vuelo_list_screen.dart';
+import '../screens/historial_estado_vuelo/historial_estado_vuelo_form_screen.dart';
+import '../screens/historial_estado_vuelo/historial_estado_vuelo_detalle_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -51,9 +56,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // ── Públicas ──────────────────────────────────────────────────────
       GoRoute(path: '/', builder: (_, __) => const HomeScreen()),
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
-      GoRoute(path: '/vuelos/:id', builder: (_, s) =>
-        VueloDetalleScreen(idVuelo: int.parse(s.pathParameters['id']!))),
-
       // ── Privadas ──────────────────────────────────────────────────────
       GoRoute(path: '/dashboard', builder: (_, __) => const DashboardScreen()),
       GoRoute(path: '/perfil',    builder: (_, __) => const ProfileScreen()),
@@ -121,6 +123,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/clima/:id', builder: (_, s) =>
         ClimaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/clima/:id/editar', builder: (_, s) => const ClimaFormScreen()),
+
+      //vuelos
+      GoRoute(path: '/vuelos', builder: (_, __) => const VueloListScreen()),
+      GoRoute(path: '/vuelos/nuevo', builder: (_, __) => const VueloFormScreen()),
+      GoRoute(path: '/vuelos/:id', builder: (_, s) =>
+        VueloDetalleScreen(idVuelo: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/vuelos/:id/editar', builder: (_, s) => const VueloFormScreen()),
+
+      // Historial de estados de vuelo
+      GoRoute(path: '/historial-estados-vuelo', builder: (_, __) => const HistorialEstadoVueloListScreen()),
+      GoRoute(path: '/historial-estados-vuelo/nuevo', builder: (_, __) => const HistorialEstadoVueloFormScreen()),
     ],
   );
 

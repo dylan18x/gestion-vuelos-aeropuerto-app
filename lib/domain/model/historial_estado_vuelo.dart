@@ -1,5 +1,15 @@
 // lib/domain/model/historial_estado_vuelo.dart
-import 'estado_vuelo.dart';
+class EstadoVueloRef {
+  final int    id;
+  final String nombreEstado; // Programado / Retrasado / Cancelado / En vuelo / Finalizado
+
+  const EstadoVueloRef({required this.id, required this.nombreEstado});
+
+  factory EstadoVueloRef.fromJson(Map<String, dynamic> j) => EstadoVueloRef(
+    id:           j['id']            as int,
+    nombreEstado: j['nombre_estado'] as String,
+  );
+}
 
 class HistorialEstadoVuelo {
   final int            id;
@@ -24,6 +34,7 @@ class HistorialEstadoVuelo {
     estado:      EstadoVueloRef.fromJson(j['id_estado'] as Map<String, dynamic>),
   );
 
+  /// Body para registrar un nuevo cambio de estado (lo crea el TECNICO).
   Map<String, dynamic> toJson() => {
     'observacion': observacion,
     'id_vuelo':    idVuelo,
