@@ -15,3 +15,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) =>
   AuthRepositoryImpl(ref.watch(authDatasourceProvider)));
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ac9d221a9c4dbd437bb849554b7fdb91de31fb7
