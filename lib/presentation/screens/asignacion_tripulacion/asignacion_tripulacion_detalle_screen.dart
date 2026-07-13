@@ -75,9 +75,8 @@ class AsignacionTripulacionDetalleScreen extends ConsumerWidget {
           children: [
             _DetailCard(children: [
               _Row('ID Asignación',  asignacion.idAsignacion.toString()),
-              _Row('ID Tripulación', asignacion.idTripulacion.toString()),
+              _Row('ID Vuelo', asignacion.idVuelo.toString()),
               _Row('ID Empleado',    asignacion.idEmpleado.toString()),
-              _Row('Fecha',          formatDate(asignacion.fechaAsignacion)),
             ]),
           ],
         ),

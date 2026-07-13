@@ -67,13 +67,28 @@ class AerolineaDetalleScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(20),
           children: [
             Center(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: AppColors.warning.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.airlines_rounded, color: AppColors.warning, size: 48),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: a.imageUrl != null
+                    ? Image.network(
+                        a.imageUrl!,
+                        width: double.infinity,
+                        height: 220,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        width: double.infinity,
+                        height: 220,
+                        decoration: BoxDecoration(
+                          color: AppColors.warning.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(
+                          Icons.airlines_rounded,
+                          color: AppColors.warning,
+                          size: 70,
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 20),
