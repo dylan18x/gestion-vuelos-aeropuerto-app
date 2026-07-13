@@ -8,6 +8,7 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDatasource _ds;
   AuthRepositoryImpl(this._ds);
 
+<<<<<<< HEAD
   @override Future<Map<String, dynamic>> login(String u, String p) => _ds.login(u, p);
   @override Future<void> logout(String r) => _ds.logout(r);
   @override Future<User> getProfile() => _ds.getProfile();
@@ -16,3 +17,18 @@ class AuthRepositoryImpl implements AuthRepository {
 final authRepositoryProvider = Provider<AuthRepository>((ref) =>
   AuthRepositoryImpl(ref.watch(authDatasourceProvider)));
 
+=======
+  @override
+  Future<Map<String, dynamic>> login(String u, String p) => _ds.login(u, p);
+
+  @override
+  Future<void> logout(String r) => _ds.logout(r);
+
+  @override
+  Future<User> getProfile() => _ds.getProfile();
+}
+
+final authRepositoryProvider = Provider<AuthRepository>((ref) {
+  return AuthRepositoryImpl(ref.watch(authDatasourceProvider));
+});
+>>>>>>> 9c93e9e349b58cd690bce44268335422b70f5c53

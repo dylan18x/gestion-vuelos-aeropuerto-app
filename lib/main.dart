@@ -25,6 +25,10 @@ class _CotopaxiAirlinesAppState extends ConsumerState<CotopaxiAirlinesApp> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
+=======
+    // Check if there's a saved token on startup
+>>>>>>> 9c93e9e349b58cd690bce44268335422b70f5c53
     Future.microtask(() => ref.read(authProvider.notifier).checkAuth());
   }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class TorreControl {
   final int idTorre;
   final String nombre;
@@ -20,4 +21,14 @@ class TorreControl {
     'nombre': nombre,
     'ubicacion': ubicacion,
   };
+=======
+import '../model/torre_control.dart';
+
+abstract class TorreControlRepository {
+  Future<List<TorreControl>> getAllTorresControl();
+  Future<TorreControl> getTorreControlById(int id);
+  Future<void> createTorreControl(TorreControl torre);
+  Future<void> updateTorreControl(TorreControl torre);
+  Future<void> deleteTorreControl(int id);
+>>>>>>> 9c93e9e349b58cd690bce44268335422b70f5c53
 }
