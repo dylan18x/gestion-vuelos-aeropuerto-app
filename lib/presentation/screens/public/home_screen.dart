@@ -130,28 +130,6 @@ class HomeScreen extends ConsumerWidget {
                 crossAxisSpacing: 18,
                 mainAxisSpacing: 18,
                 childAspectRatio: 1.05,
-                children: [
-                  _ServiceCard(
-                    icon: Icons.flight_takeoff,
-                    title: "Vuelos",
-                    onTap: () => context.go("/flights"),
-                  ),
-                  _ServiceCard(
-                    icon: Icons.info_outline,
-                    title: "Información",
-                    onTap: () => context.go("/information"),
-                  ),
-                  _ServiceCard(
-                    icon: Icons.contact_phone,
-                    title: "Contacto",
-                    onTap: () => context.go("/contact"),
-                  ),
-                  _ServiceCard(
-                    icon: Icons.schedule,
-                    title: "Estado",
-                    onTap: () => context.go("/flights"),
-                  ),
-                ],
               ),
             ),
 

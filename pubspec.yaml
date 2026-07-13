@@ -7,8 +7,10 @@ environment:
   sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
+  http: ^1.2.1
   flutter:
     sdk: flutter
+    
 
   flutter_riverpod: ^2.5.1
   riverpod_annotation: ^2.3.5
