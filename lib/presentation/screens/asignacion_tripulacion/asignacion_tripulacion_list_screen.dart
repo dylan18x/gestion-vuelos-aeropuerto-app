@@ -73,8 +73,7 @@ class AsignacionTripulacionListScreen extends ConsumerWidget {
                         style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600),
                       ),
                       subtitle: Text(
-                        'Tripulación: ${asignacion.idTripulacion} · Empleado: ${asignacion.idEmpleado} · '
-                        '${formatDate(asignacion.fechaAsignacion)}',
+                        'Vuelo: ${asignacion.idVuelo} · Empleado: ${asignacion.idEmpleado} · ',
                         style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded, color: AppColors.textSecondary),
