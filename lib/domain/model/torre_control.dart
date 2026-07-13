@@ -1,23 +1,52 @@
-class TorreControl {
-  final int idTorre;
+// lib/domain/model/torre_control.dart
+
+class AeropuertoRef {
+  final int id;
   final String nombre;
-  final String ubicacion;
+  final String ciudad;
+  final String pais;
+  final String codigoIata;
+
+  const AeropuertoRef({
+    required this.id,
+    required this.nombre,
+    required this.ciudad,
+    required this.pais,
+    required this.codigoIata,
+  });
+
+  factory AeropuertoRef.fromJson(Map<String, dynamic> j) => AeropuertoRef(
+    id:         j['id']          as int,
+    nombre:     j['nombre']      as String,
+    ciudad:     j['ciudad']      as String,
+    pais:       j['pais']        as String,
+    codigoIata: j['codigo_iata'] as String,
+  );
+}
+
+class TorreControl {
+  final int    idTorre;
+  final String nombre;
+  final String frecuencia;
+  final int    idAeropuerto; // o AeropuertoRef si tu API lo anida como objeto
 
   const TorreControl({
     required this.idTorre,
     required this.nombre,
-    required this.ubicacion,
+    required this.frecuencia,
+    required this.idAeropuerto,
   });
 
   factory TorreControl.fromJson(Map<String, dynamic> json) => TorreControl(
-    idTorre: json['id_torre'],
-    nombre: json['nombre'],
-    ubicacion: json['ubicacion'],
+    idTorre:      json['id_torre']      as int,
+    nombre:       json['nombre']        as String,
+    frecuencia:   json['frecuencia']    as String,
+    idAeropuerto: json['id_aeropuerto'] as int,
   );
 
   Map<String, dynamic> toJson() => {
-    'id_torre': idTorre,
-    'nombre': nombre,
-    'ubicacion': ubicacion,
+    'nombre':        nombre,
+    'frecuencia':    frecuencia,
+    'id_aeropuerto': idAeropuerto,
   };
 }

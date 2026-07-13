@@ -1,3 +1,4 @@
+// lib/domain/model/asignacion_tripulacion.dart
 class AsignacionTripulacion {
   final int idAsignacion;
   final int idTripulacion;
@@ -12,10 +13,10 @@ class AsignacionTripulacion {
   });
 
   factory AsignacionTripulacion.fromJson(Map<String, dynamic> json) => AsignacionTripulacion(
-    idAsignacion: json['id_asignacion'],
-    idTripulacion: json['id_tripulacion'],
-    idEmpleado: json['id_empleado'],
-    fechaAsignacion: json['fecha_asignacion'],
+    idAsignacion:    json['id_asignacion']    as int? ?? 0,
+    idTripulacion:   json['id_tripulacion']   as int? ?? 0,
+    idEmpleado:      json['id_empleado']      as int? ?? 0,
+    fechaAsignacion: json['fecha_asignacion'] as String? ?? '',
   );
 
   Map<String, dynamic> toJson() => {

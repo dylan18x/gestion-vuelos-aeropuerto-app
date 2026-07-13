@@ -34,6 +34,11 @@ class DashboardScreen extends ConsumerWidget {
       const _Module('Pilotos',        Icons.person_rounded,           '/pilotos',        Color(0xFF10B981)),
       const _Module('Incidentes',     Icons.report_problem_rounded,   '/incidentes'  ,Color(0xFFF43F5E)),
       const _Module('Registros de Vuelo', Icons.assignment_rounded,   '/registros-vuelo', Color(0xFF8B5CF6)),
+      const _Module('Asignación de Pista', Icons.airplane_ticket_rounded, '/asignacion-pista', Color(0xFF3B82F6)),
+      const _Module('Asignación de Tripulación', Icons.group_add_rounded, '/asignacion-tripulacion', Color(0xFF10B981)),
+      const _Module('Torres de Control', Icons.group_add_rounded, '/torres-control', Color(0xFF10B981)),
+      const _Module('Pistas', Icons.group_add_rounded, '/pistas', Color(0xFF10B981)),
+      const _Module('Autorizaciones de vuelo', Icons.group_add_rounded, '/autorizaciones-vuelo', Color(0xFF10B981)),
     ];
 
     return Scaffold(

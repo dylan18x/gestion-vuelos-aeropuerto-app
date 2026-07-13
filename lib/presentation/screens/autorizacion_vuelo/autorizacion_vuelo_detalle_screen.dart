@@ -1,21 +1,22 @@
-// lib/presentation/screens/pistas/pista_detalle_screen.dart
+// lib/presentation/screens/autorizacion_vuelo/autorizacion_detalle_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/repository/pista_repository_impl.dart';
+import '../../../core/utils/formatters.dart';
+import '../../../data/repository/autorizacion_vuelo_repository_impl.dart';
 import '../../../theme/app_colors.dart';
-import '../../providers/pista_provider.dart';
+import '../../providers/autorizacion_vuelo_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/app_confirm_dialog.dart';
 import '../../widgets/app_error_widget.dart';
-import 'pista_form_screen.dart';
+import 'autorizacion_vuelo_form_screen.dart';
 
-class PistaDetalleScreen extends ConsumerWidget {
+class AutorizacionDetalleScreen extends ConsumerWidget {
   final int id;
-  const PistaDetalleScreen({super.key, required this.id});
+  const AutorizacionDetalleScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final async = ref.watch(pistaDetalleProvider(id));
+    final async = ref.watch(autorizacionVueloDetalleProvider(id));
     final auth = ref.watch(authProvider);
     final canEdit = auth.isAuthenticated;
     final canDelete = auth.isAdmin;
@@ -23,15 +24,15 @@ class PistaDetalleScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Detalle de pista'),
+        title: const Text('Detalle de Autorización'),
         actions: [
           if (canEdit)
             IconButton(
               icon: const Icon(Icons.edit_rounded, color: AppColors.accent),
-              onPressed: () => async.whenData((pista) => Navigator.push(
+              onPressed: () => async.whenData((autorizacion) => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => PistaFormScreen(pista: pista)),
-              ).then((_) => ref.invalidate(pistaDetalleProvider(id)))),
+                MaterialPageRoute(builder: (_) => AutorizacionFormScreen(autorizacion: autorizacion)),
+              ).then((_) => ref.invalidate(autorizacionVueloDetalleProvider(id)))),
             ),
           if (canDelete)
             IconButton(
@@ -39,16 +40,16 @@ class PistaDetalleScreen extends ConsumerWidget {
               onPressed: () async {
                 final ok = await showConfirmDialog(
                   context,
-                  title: 'Eliminar pista',
+                  title: 'Eliminar autorización',
                   content: '¿Estás seguro? Esta acción no se puede deshacer.',
                 );
                 if (!ok || !context.mounted) return;
                 try {
-                  await ref.read(pistaRepositoryProvider).deletePista(id);
-                  ref.invalidate(pistasProvider);
+                  await ref.read(autorizacionVueloRepositoryProvider).deleteAutorizacionVuelo(id);
+                  ref.invalidate(autorizacionesVueloProvider);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Pista eliminada'), backgroundColor: AppColors.success),
+                      const SnackBar(content: Text('Autorización eliminada'), backgroundColor: AppColors.success),
                     );
                     Navigator.of(context).pop();
                   }
@@ -67,15 +68,17 @@ class PistaDetalleScreen extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => AppErrorWidget(
           error: e.toString(),
-          onRetry: () => ref.invalidate(pistaDetalleProvider(id)),
+          onRetry: () => ref.invalidate(autorizacionVueloDetalleProvider(id)),
         ),
-        data: (pista) => ListView(
+        data: (autorizacion) => ListView(
           padding: const EdgeInsets.all(20),
           children: [
             _DetailCard(children: [
-              _Row('ID',      pista.idPista.toString()),
-              _Row('Código',  pista.codigo),
-              _Row('Estado',  pista.estado),
+              _Row('ID Autorización', autorizacion.idAutorizacion.toString()),
+              _Row('ID Vuelo',        autorizacion.idVuelo.toString()),
+              _Row('Tipo',            autorizacion.tipoAutorizacion),
+              _Row('Estado',          autorizacion.estado),
+              _Row('Fecha',           formatDate(autorizacion.fecha)),
             ]),
           ],
         ),
@@ -109,7 +112,7 @@ class _Row extends StatelessWidget {
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(width: 100, child: Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13))),
+        SizedBox(width: 140, child: Text(label, style: const TextStyle(color: AppColors.textSecondary, fontSize: 13))),
         Expanded(child: Text(value, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w600))),
       ],
     ),

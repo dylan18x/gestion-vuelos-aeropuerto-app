@@ -67,12 +67,17 @@ import '../screens/registro_vuelo/registro_vuelo_list_screen.dart';
 import '../screens/registro_vuelo/registro_vuelo_form_screen.dart';
 import '../screens/registro_vuelo/registro_vuelo_detalle_screen.dart';
 
-import '../screens/asignacion_pista/asignacion_pista_list_screen.dart';
-import '../screens/asignacion_tripulacion/asignacion_tripulacion_list_screen.dart';
-import '../screens/autorizacion_vuelo/autorizacion_vuelo_list_screen.dart';
-import '../screens/pista/pista_list_screen.dart';
 import '../screens/torre_control/torre_control_list_screen.dart';
-
+import '../screens/torre_control/torre_control_detalle_screen.dart';
+import '../screens/torre_control/torre_control_form_screen.dart';
+import '../screens/pistas/pista_list_screen.dart';
+import '../screens/pistas/pista_detalle_screen.dart';
+import '../screens/asignacion_tripulacion/asignacion_tripulacion_list_screen.dart';
+import '../screens/asignacion_tripulacion/asignacion_tripulacion_detalle_screen.dart';
+import '../screens/asignacion_pista/asignacion_pista_list_screen.dart';
+import '../screens/asignacion_pista/asignacion_pista_detalle_screen.dart';
+import '../screens/autorizacion_vuelo/autorizacion_vuelo_list_screen.dart';
+import '../screens/autorizacion_vuelo/autorizacion_vuelo_detalle_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -225,10 +230,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         RegistroVueloDetalleScreen(id: int.parse(s.pathParameters['id']!))),
 
       GoRoute(path: '/asignacion-pista', builder: (_, __) => const AsignacionPistaListScreen()),
+      GoRoute(path: '/asignacion-pista/:id', builder: (_, s) =>
+        AsignacionPistaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/asignacion-tripulacion', builder: (_, __) => const AsignacionTripulacionListScreen()),
-      GoRoute(path: '/autorizacion-vuelo', builder: (_, __) => const AutorizacionVueloListScreen()),
+      GoRoute(path: '/asignacion-tripulacion/:id', builder: (_, s) =>
+        AsignacionTripulacionDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/autorizaciones-vuelo', builder: (_, __) => const AutorizacionVueloListScreen()),
+      GoRoute(path: '/autorizaciones-vuelo/:id', builder: (_, s) =>
+        AutorizacionDetalleScreen(id: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/pistas', builder: (_, __) => const PistaListScreen()),
+      GoRoute(path: '/pistas/:id', builder: (_, s) =>
+        PistaDetalleScreen(id: int.parse(s.pathParameters['id']!))),
       GoRoute(path: '/torres-control', builder: (_, __) => const TorreControlListScreen()),
+      GoRoute(path: '/torres-control/nuevo', builder: (_, __) => const TorreControlFormScreen()),
+      GoRoute(path: '/torres-control/:id', builder: (_, s) =>
+        TorreControlDetalleScreen(id: int.parse(s.pathParameters['id']!))),
+      GoRoute(path: '/torres-control/:id/editar', builder: (_, s) =>
+        TorreControlFormScreen(id: int.parse(s.pathParameters['id']!))),
       
     ],
   );
