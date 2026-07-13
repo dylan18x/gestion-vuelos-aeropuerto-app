@@ -24,15 +24,15 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> j) => User(
-    id:         j['id']          as int,
-    username:   j['username']    as String,
-    email:      j['email']       as String,
-    firstName:  j['first_name']  as String,
-    lastName:   j['last_name']   as String,
-    isStaff:    j['is_staff']    as bool,
-    isActive:   j['is_active']   as bool,
-    dateJoined: j['date_joined'] as String,
-    numOrders:  j['num_orders']  as int,
+    id:         j['id']          as int? ?? 0,
+    username:   j['username']    as String? ?? '',
+    email:      j['email']       as String? ?? '',
+    firstName:  j['first_name']  as String? ?? '',
+    lastName:   j['last_name']   as String? ?? '',
+    isStaff:    j['is_staff']    as bool? ?? false,
+    isActive:   j['is_active']   as bool? ?? true,
+    dateJoined: j['date_joined'] as String? ?? '',
+    numOrders:  j['num_orders']  as int? ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
