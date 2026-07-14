@@ -6,6 +6,7 @@ class Avion {
   final int    capacidad;
   final String matricula;
   final int    idAerolinea;
+  final String? imageUrl;
 
   const Avion({
     required this.idAvion,
@@ -13,6 +14,7 @@ class Avion {
     required this.capacidad,
     required this.matricula,
     required this.idAerolinea,
+    this.imageUrl,
   });
 
   factory Avion.fromJson(Map<String, dynamic> j) {
@@ -23,6 +25,7 @@ class Avion {
       capacidad:   j['capacidad']  is int ? j['capacidad'] as int : int.tryParse(j['capacidad'].toString()) ?? 0,
       matricula:   j['matricula']  as String,
       idAerolinea: aRef is int ? aRef : (aRef is Map ? aRef['id_aerolinea'] as int : 0),
+      imageUrl: j['image_url'] as String?,
     );
   }
 
@@ -33,7 +36,7 @@ class Avion {
     'id_aerolinea': idAerolinea,
   };
 
-  Avion copyWith({String? modelo, int? capacidad, String? matricula, int? idAerolinea}) => Avion(
+  Avion copyWith({String? modelo, int? capacidad, String? matricula, int? idAerolinea,String? imageUrl,}) => Avion(
     idAvion:     idAvion,
     modelo:      modelo      ?? this.modelo,
     capacidad:   capacidad   ?? this.capacidad,

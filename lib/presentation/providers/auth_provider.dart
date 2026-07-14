@@ -1,4 +1,3 @@
-// lib/presentation/providers/auth_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/local/secure_storage.dart';
 import '../../data/repository/auth_repository_impl.dart';
@@ -12,7 +11,8 @@ class AuthState {
   const AuthState({this.user, this.isLoading = false, this.error});
 
   bool get isAuthenticated => user != null;
-  bool get isAdmin => user?.isStaff ?? false;
+  bool get isAdmin => user?.role == UserRole.admin;
+  UserRole get role => user?.role ?? UserRole.sinRol;
 
   AuthState copyWith({User? user, bool? isLoading, String? error, bool clearUser = false}) => AuthState(
     user:      clearUser ? null : (user ?? this.user),
@@ -31,18 +31,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (!hasToken) return;
     try {
       state = state.copyWith(isLoading: true);
-      final role = await storage.getUserRole();
-      final idStr = await storage.getUserId();
+      final roleStr = await storage.getUserRole();
+      final idStr   = await storage.getUserId();
+      final role    = UserRole.fromStorageString(roleStr);
+
       final user = User(
         id: int.tryParse(idStr ?? '') ?? 0,
         username: 'Usuario Logueado',
         email: '',
         firstName: '',
         lastName: '',
-        isStaff: role == 'admin',
+        isStaff: role == UserRole.admin,
         isActive: true,
         dateJoined: '',
         numOrders: 0,
+        role: role,
       );
       state = AuthState(user: user);
     } catch (_) {
@@ -57,14 +60,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final repo    = _ref.read(authRepositoryProvider);
       final storage = _ref.read(secureStorageProvider);
       final data    = await repo.login(username, password);
-      
+
       await storage.saveAccessToken(data['access']  as String);
       await storage.saveRefreshToken(data['refresh'] as String);
-      
+
       final user = User.fromJson(data);
       await storage.saveUserId(user.id.toString());
-      await storage.saveUserRole(user.isStaff ? 'admin' : 'torre');
-      
+      await storage.saveUserRole(user.role.toStorageString());
+
       state = AuthState(user: user);
       return true;
     } catch (e) {

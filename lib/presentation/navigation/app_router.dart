@@ -7,6 +7,7 @@ import 'package:flutter_shop_app/presentation/screens/public/information_screen.
 import 'package:flutter_shop_app/presentation/screens/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/config/access_control.dart';
 import '../providers/auth_provider.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/profile_screen.dart';
@@ -90,7 +91,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/splash',
     errorBuilder: (context, state) => const NotFoundScreen(),
     redirect: (context, state) {
-      final isLoggedIn = ref.read(authProvider).isAuthenticated;
+      final authState = ref.read(authProvider);
+      final isLoggedIn = authState.isAuthenticated;
+      final role = authState.role;
       final location = state.uri.path;
 
       final publicRoutes = {
@@ -153,6 +156,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       }
 
       if (isLoggedIn && (location == '/login' || location == '/splash')) {
+        return '/dashboard';
+      }
+
+      // 🔒 Si está logueado pero su rol no tiene acceso a esta ruta privada,
+      // lo mandamos de vuelta al dashboard (que le mostrará solo lo suyo).
+      if (isLoggedIn && isPrivate && !AccessControl.canAccess(role, location)) {
         return '/dashboard';
       }
 
@@ -254,7 +263,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           path: '/aviones/:id/editar',
           builder: (_, s) => const AvionFormScreen()),
 
-      // Tipos de avin
+      // Tipos de avión
       GoRoute(
           path: '/tipos-avion',
           builder: (_, __) => const TipoAvionListScreen()),
@@ -475,7 +484,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 
   ref.listen(authProvider, (previous, next) {
-    if (previous?.isAuthenticated != next.isAuthenticated) {
+    if (previous?.isAuthenticated != next.isAuthenticated ||
+        previous?.role != next.role) {
       router.refresh();
     }
   });
