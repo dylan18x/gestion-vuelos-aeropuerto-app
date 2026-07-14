@@ -35,7 +35,7 @@ class AutorizacionVueloRemoteDatasourceImpl implements AutorizacionVueloRemoteDa
   @override
   Future<List<AutorizacionVuelo>> getAutorizaciones() async {
     try {
-      final response = await _dio.get('/autorizacion-vuelo/');
+      final response = await _dio.get('/autorizaciones-vuelo/');
       return _extractList(response.data)
           .map((e) => AutorizacionVuelo.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -47,7 +47,7 @@ class AutorizacionVueloRemoteDatasourceImpl implements AutorizacionVueloRemoteDa
   @override
   Future<AutorizacionVuelo> getAutorizacion(int id) async {
     try {
-      final response = await _dio.get('/autorizacion-vuelo/$id/');
+      final response = await _dio.get('/autorizaciones-vuelo/$id/');
       return AutorizacionVuelo.fromJson(_extractMap(response.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
@@ -57,7 +57,7 @@ class AutorizacionVueloRemoteDatasourceImpl implements AutorizacionVueloRemoteDa
   @override
   Future<AutorizacionVuelo> createAutorizacion(Map<String, dynamic> payload) async {
     try {
-      final response = await _dio.post('/autorizacion-vuelo/', data: payload);
+      final response = await _dio.post('/autorizaciones-vuelo/', data: payload);
       return AutorizacionVuelo.fromJson(_extractMap(response.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
@@ -67,7 +67,7 @@ class AutorizacionVueloRemoteDatasourceImpl implements AutorizacionVueloRemoteDa
   @override
   Future<AutorizacionVuelo> updateAutorizacion(int id, Map<String, dynamic> payload) async {
     try {
-      final response = await _dio.patch('/autorizacion-vuelo/$id/', data: payload);
+      final response = await _dio.patch('/autorizaciones-vuelo/$id/', data: payload);
       return AutorizacionVuelo.fromJson(_extractMap(response.data));
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
@@ -77,7 +77,7 @@ class AutorizacionVueloRemoteDatasourceImpl implements AutorizacionVueloRemoteDa
   @override
   Future<void> deleteAutorizacion(int id) async {
     try {
-      await _dio.delete('/autorizacion-vuelo/$id/');
+      await _dio.delete('/autorizaciones-vuelo/$id/');
     } on DioException catch (e) {
       throw ApiException.fromDioError(e);
     }
