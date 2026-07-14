@@ -6,6 +6,7 @@ class Aeropuerto {
   final String ciudad;
   final String pais;
   final String codigoIata;
+  final String? imageUrl;
 
   const Aeropuerto({
     required this.idAeropuerto,
@@ -13,6 +14,7 @@ class Aeropuerto {
     required this.ciudad,
     required this.pais,
     required this.codigoIata,
+    this.imageUrl,
   });
 
   factory Aeropuerto.fromJson(Map<String, dynamic> j) => Aeropuerto(
@@ -21,6 +23,7 @@ class Aeropuerto {
     ciudad:       j['ciudad']        as String,
     pais:         j['pais']          as String,
     codigoIata:   j['codigo_iata']   as String,
+    imageUrl: j['image_url'] as String?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -31,12 +34,13 @@ class Aeropuerto {
   };
 
   Aeropuerto copyWith({
-    String? nombre, String? ciudad, String? pais, String? codigoIata,
+    String? nombre, String? ciudad, String? pais, String? codigoIata,String? imageUrl,
   }) => Aeropuerto(
     idAeropuerto: idAeropuerto,
     nombre:       nombre      ?? this.nombre,
     ciudad:       ciudad      ?? this.ciudad,
     pais:         pais        ?? this.pais,
     codigoIata:   codigoIata  ?? this.codigoIata,
+    imageUrl: imageUrl ?? this.imageUrl,
   );
 }

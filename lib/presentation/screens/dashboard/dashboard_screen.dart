@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_colors.dart';
+import '../../../core/config/access_control.dart';
+import '../../../domain/model/user.dart';
 import '../../providers/auth_provider.dart';
-
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -55,27 +56,56 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     _Module('Asignación Trip.', Icons.group_add_rounded, '/asignacion-tripulacion', Color(0xFF10B981)),
   ];
 
+  String _roleLabel(UserRole role) {
+    switch (role) {
+      case UserRole.admin:
+        return ' Administrador';
+      case UserRole.controlador:
+        return ' Controlador';
+      case UserRole.tecnico:
+        return ' Técnico';
+      case UserRole.rrhh:
+        return ' RRHH';
+      case UserRole.operadorVuelo:
+        return ' Operador de Vuelo';
+      case UserRole.sinRol:
+        return ' Sin rol asignado';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
     final user = auth.user;
+    final role = auth.role;
 
-    // Dependiendo del índice del navbar, mostramos una lista u otra
-    List<_Module> currentModules = [];
-    switch (_currentIndex) {
-      case 0:
-        currentModules = _vuelosModules;
-        break;
-      case 1:
-        currentModules = _infraestructuraModules;
-        break;
-      case 2:
-        currentModules = _flotaModules;
-        break;
-      case 3:
-        currentModules = _personalModules;
-        break;
+    List<_Module> filterByRole(List<_Module> modules) =>
+        modules.where((m) => AccessControl.canSeeModule(role, m.route)).toList();
+
+    // Construimos las 4 secciones ya filtradas por rol
+    final vuelosFiltrados = filterByRole(_vuelosModules);
+    final infraestructuraFiltrada = filterByRole(_infraestructuraModules);
+    final flotaFiltrada = filterByRole(_flotaModules);
+    final personalFiltrado = filterByRole(_personalModules);
+
+    // Armamos dinámicamente las pestañas visibles: solo las que tienen módulos
+    final tabs = <_TabData>[
+      if (vuelosFiltrados.isNotEmpty)
+        _TabData('Vuelos', Icons.flight_takeoff, 'Gestión de Vuelos', vuelosFiltrados),
+      if (infraestructuraFiltrada.isNotEmpty)
+        _TabData('Lugar', Icons.business, 'Gestión de Infraestructura', infraestructuraFiltrada),
+      if (flotaFiltrada.isNotEmpty)
+        _TabData('Flota', Icons.build, 'Flota y Mantenimiento', flotaFiltrada),
+      if (personalFiltrado.isNotEmpty)
+        _TabData('Personal', Icons.people, 'Personal y Asignaciones', personalFiltrado),
+    ];
+
+    // Si el índice actual ya no existe (por cambio de rol/lista), lo corregimos
+    if (_currentIndex >= tabs.length) {
+      _currentIndex = 0;
     }
+
+    final currentModules = tabs.isEmpty ? <_Module>[] : tabs[_currentIndex].modules;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -93,29 +123,31 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      // NAVBAR INFERIOR
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
-            (states) => const TextStyle(color: Colors.black),
-          ),
-        ),
-        child: NavigationBar(
-          backgroundColor: Colors.white,
-          selectedIndex: _currentIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.flight_takeoff, color: Colors.black), label: 'Vuelos'),
-            NavigationDestination(icon: Icon(Icons.business, color: Colors.black), label: 'Lugar'),
-            NavigationDestination(icon: Icon(Icons.build, color: Colors.black), label: 'Flota'),
-            NavigationDestination(icon: Icon(Icons.people, color: Colors.black), label: 'Personal'),
-          ],
-        ),
-      ),
+      // NAVBAR INFERIOR — solo se muestra si hay más de una pestaña con contenido
+      bottomNavigationBar: tabs.length <= 1
+          ? null
+          : NavigationBarTheme(
+              data: NavigationBarThemeData(
+                labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>(
+                  (states) => const TextStyle(color: Colors.black),
+                ),
+              ),
+              child: NavigationBar(
+                backgroundColor: Colors.white,
+                selectedIndex: _currentIndex,
+                onDestinationSelected: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                destinations: tabs
+                    .map((t) => NavigationDestination(
+                          icon: Icon(t.icon, color: Colors.black),
+                          label: t.label,
+                        ))
+                    .toList(),
+              ),
+            ),
       // CUERPO: Muestra el header fijo y los módulos dinámicos abajo
       body: CustomScrollView(
         slivers: [
@@ -146,7 +178,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     children: [
                       Text('¡Bienvenido, ${user?.username ?? ''}!',
                           style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(auth.isAdmin ? ' Administrador' : ' Torre de Control',
+                      Text(_roleLabel(role),
                           style: const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
                     ],
                   ),
@@ -154,41 +186,61 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
             ),
           ),
-          
+
           // Título de la sección dinámica
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Text(
-                _currentIndex == 0 ? 'Gestión de Vuelos' :
-                _currentIndex == 1 ? 'Gestión de Infraestructura' :
-                _currentIndex == 2 ? 'Flota y Mantenimiento' : 'Personal y Asignaciones',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+          if (tabs.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text(
+                  tabs[_currentIndex].title,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                ),
               ),
             ),
-          ),
 
           // Grilla que cambia de elementos dependiendo del Navbar
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (_, i) => _ModuleCard(module: currentModules[i]),
-                childCount: currentModules.length,
+          if (currentModules.isNotEmpty)
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate(
+                  (_, i) => _ModuleCard(module: currentModules[i]),
+                  childCount: currentModules.length,
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 1.1,
+                ),
               ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 1.1,
+            )
+          else
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+                child: Center(
+                  child: Text(
+                    'No tienes módulos asignados todavía.',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                ),
               ),
             ),
-          ),
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );
   }
+}
+
+class _TabData {
+  final String label;
+  final IconData icon;
+  final String title;
+  final List<_Module> modules;
+  const _TabData(this.label, this.icon, this.title, this.modules);
 }
 
 class _Module {
@@ -218,7 +270,7 @@ class _ModuleCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: module.color.withValues(alpha: 0.12), 
+              color: module.color.withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(module.icon, color: module.color, size: 28),
